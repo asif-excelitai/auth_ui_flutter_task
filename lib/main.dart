@@ -1,7 +1,10 @@
-import 'package:ecshop/loginscreen.dart';
+
+//1st
+import 'package:ecshop/Screen/registration.dart';
+import 'package:ecshop/demo/photo.dart';
 import 'package:flutter/material.dart';
 import 'Screen/loginscreen.dart';
-
+import 'demo/newonepage.dart';
 void main(){
   runApp(Myapp());
 }
@@ -10,10 +13,12 @@ class Myapp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Mylogin(),
-      // home: demoinfo(),
+     // home: HomeScreen(),
+     //  home: Imageregistration(),
+     //  home: Registration(),
     );
   }
 }

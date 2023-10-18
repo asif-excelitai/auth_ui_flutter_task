@@ -5,155 +5,275 @@ import 'package:ecshop/Screen/registration.dart';
 import 'package:ecshop/programming/customeClippper.dart';
 import 'package:flutter/material.dart';
 
+import '../demo/newonepage.dart';
+
 class Mylogin extends StatefulWidget {
   const Mylogin({super.key});
 
   @override
   State<Mylogin> createState() => _MyloginState();
 }
-
 class _MyloginState extends State<Mylogin> {
-  bool ischeckd = false;
-  TextEditingController _pnController = new TextEditingController();
-  TextEditingController _passController = new TextEditingController();
+  // void _submitForm1(){
+  //   if(_formKey1.currentState!.validate()){
+  //     {
+  //       Navigator.push(
+  //         context,
+  //         MaterialPageRoute(
+  //             builder: (context) => Newone()));
+  //
+  //     }
+  //   }
+  // }
+  final _formKey1 = GlobalKey<FormState>();
+  bool isMobileNoError=false;
+  String? mobileErrorText;
+  bool isPasswordError=false;
+  String? passwordErrorText;
+  bool isChecked = false;
+  TextEditingController _phoneNumberController = new TextEditingController();
+  TextEditingController _passWordController = new TextEditingController();
+  String? _validatePhoneNumber(value) {
+    if (value!.isEmpty) {
+      setState(() {
+        isMobileNoError = true;
+        mobileErrorText = 'Please Enter a Valid number';
+      });
+      return 'Please Enter a Valid number';
+    }
+    RegExp phonregex = RegExp(r'^(01|\+880)\d{9,12}$');
+    if (!phonregex.hasMatch(value)) {
+      setState(() {
+        isMobileNoError = true;
+        mobileErrorText = 'Enter Correct Phone number';
+      });
+      return 'Enter Correct Phone number';
+    }
+    else {
+      setState(() {
+        isMobileNoError = false;
+        mobileErrorText = '';
+      });
+    }
+    return null;
+  }
+  String? _validatePassword(value){
+    if(value!.isEmpty){
+      setState(() {
+        isPasswordError=true;
+        passwordErrorText='Enter valid password';
+      });
+      return 'Enter valid password';
+    }
+  //   RegExp passregexp = RegExp(r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$');
+  // if(!passregexp.hasMatch(value)){
+  //   return 'Enter your Password';
+  // }
+  else if(value.length!<8){
+    setState(() {
+      isPasswordError=true;
+      passwordErrorText='More than 8 Character';
+    });
+    return 'More than 8 Character';
+  }
+
+  else{
+      setState(() {
+        isPasswordError=false;
+        passwordErrorText='';
+      });
+    }
+  return null;
+
+  }
+  @override
+  void dispose() {
+       _passWordController.dispose();
+        _phoneNumberController.dispose();
+        super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     final _height = MediaQuery.of(context).size.height;
     final _width = MediaQuery.of(context).size.width;
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Center(
-        child: Container(
-            height: _height,
-            width: _width,
-            color: Color(0xFFF3F3F3),
-            child: Stack(
-              children: [
-                Container(
-                  child: ClipPath(
-                    clipper: Traingle(),
-                    child: Container(
-                      // color: Color(0xE5D9D9),
-                      color: Colors.redAccent,
+    return GestureDetector(
+       onTap: (){
+         FocusScopeNode currentFocus=FocusScope.of(context);
+         if(!currentFocus.hasPrimaryFocus){
+           currentFocus.unfocus();
+         }
+       },
+      child: SafeArea(
+        child: Scaffold(
+           resizeToAvoidBottomInset: true,
+          backgroundColor: Color(0xffF3F3F3),
+          body: SingleChildScrollView(
+            child: Container(
+              height: _height,
+              width: _width,
+              child: Center(
+                child: Stack(
+                  children: [
+                    ClipPath(
+                      clipper: Traingle(),
+                      child: Container(
+                        color: Color(0xffFEFEFE),
+                      ),
                     ),
-                  ),
-                ),
-                Positioned(
-                    top: 90,
-                    left: 10,
-                    right: 10,
-                    child: Column(
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        SizedBox(height: 50,),
+                        Image.asset("assets/logo/bppshop_banner.png",height: 50,width: 260,fit: BoxFit.contain,),
                         Container(
-                          //padding: EdgeInsets.symmetric(vertic),
-                          child: const Text(
-                            "BPP SHOP",
-                            style: (TextStyle(
-                                color: Colors.white12, fontSize: 50.0)),
-                          ),
-                        ),
-                        Container(
-                          //padding: EdgeInsets.only(left: 10,right: 10),
+                          padding: EdgeInsets.symmetric(horizontal: 5),
+                          margin: EdgeInsets.symmetric(horizontal: 10),
                           width: _width,
-                          height: _height * .7,
-                          color: Colors.white24,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              children: [
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.only(top: 10, left: 10),
-                                  child: Text(
-                                    "Sign in",
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black),
-                                  ),
+                          height: _height * .4,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color:Color(0xFFFFFFFF)
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Sign in",
+                                style: TextStyle(
+                                    fontSize: 20,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Text(
+                                "Wellcome to Seller login",
+                                style: TextStyle(fontSize: 15.0),
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Padding(
+                                padding:
+                                EdgeInsets.only(left: 8.0, right: 8.0),
+                                child: Divider(
+                                  color: Colors.black,
+                                  height: 1.0,
+                                  thickness: .4,
                                 ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Text(
-                                  "Wellcome to Seller login",
-                                  style: TextStyle(fontSize: 15.0),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Padding(
-                                  padding:
-                                      EdgeInsets.only(left: 8.0, right: 8.0),
-                                  child: Divider(
-                                    color: Colors.black,
-                                    height: 1.0,
-                                    thickness: .4,
-                                  ),
-                                ),
-                                SizedBox(
-                                  height: 5,
-                                ),
-                                Column(
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 8.0),
-                                      child: Text(
-                                        "Mobile",
-                                        style: TextStyle(
-                                          fontSize: 15.0,
-                                          color: Colors.white,
+                              ),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              SingleChildScrollView(
+                                child: Form(
+                                  key: _formKey1,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                    CrossAxisAlignment.stretch,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          "Mobile",
+                                          style: TextStyle(
+                                            fontSize: 15.0,
+                                            color: Colors.black38,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    TextFormField(
-                                      controller: _pnController,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        hintText: "Enter mobile Number",
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsets.only(left: 8.0),
-                                      child: Text(
-                                        "Password",
-                                        style: TextStyle(
-                                          fontSize: 15.0,
-                                          color: Colors.white,
+                                      Container(
+                                        height: _height *.06,
+                                        width: _width * .6,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: isMobileNoError?Colors.red:Colors.blue,
+                                          ),
+                                          borderRadius: BorderRadius.circular(10),
                                         ),
-                                      ),
-                                    ),
-                                    TextFormField(
-                                      obscureText: true,
-                                      controller: _passController,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        hintText: "Password",
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 5,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Checkbox(
-                                          checkColor: Colors.white,
-                                          value: ischeckd,
-                                          onChanged: (bool? value) {
-                                            setState(() {
-                                              ischeckd = value!;
-                                            });
+                                        child: TextFormField(
+                                          keyboardType: TextInputType.number,
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                                          controller: _phoneNumberController,
+                                          decoration: InputDecoration(
+                                            filled: true,
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide.none,
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            hintText: "Enter mobile Number",
+                                          ),
+                                          onChanged: (value){
+                                           _validatePhoneNumber(value);
                                           },
                                         ),
-                                        Text(
-                                          "Remember me ",
-                                          style: TextStyle(fontSize: 15),
+                                      ),
+                                      isMobileNoError?Text("${mobileErrorText}",style: TextStyle(color: Colors.redAccent),):SizedBox.shrink(),
+                                     // SizedBox(height: 10,),
+                                      Padding(
+                                        padding: EdgeInsets.only(left: 8.0),
+                                        child: Text(
+                                          "Password",
+                                          style: TextStyle(
+                                            fontSize: 15.0,
+                                            color: Colors.black38,
+                                          ),
                                         ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              left: 109.0),
-                                          child: TextButton(
+                                      ),
+                                      Container(
+                                        height: _height * .06,
+                                        width: _width * .6,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: isPasswordError?Colors.red : Colors.blue,
+                                          ),borderRadius: BorderRadius.circular(10),
+                                        ),
+                                        child: TextFormField(
+                                          autovalidateMode: AutovalidateMode.onUserInteraction,
+                                          obscureText: true,
+                                          controller: _passWordController,
+                                          decoration: InputDecoration(
+                                            filled: true,
+                                            border: OutlineInputBorder(
+                                              borderSide: BorderSide.none,
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            hintText: "Enter Password",
+                                          ),
+                                          // validator: _validatePassword,
+                                          onChanged: (value){
+                                            // setState(() {
+                                            //   // isPasswordError=false;
+                                            //   // passwordErrorText='';
+                                            //
+                                            // });
+                                            _validatePassword(value);
+                                          },
+                                        ),
+                                      ),
+                                      isPasswordError?Text("${passwordErrorText}",style: TextStyle(color: Colors.redAccent),):SizedBox.shrink(),
+                                      // SizedBox(
+                                      //   height: 5,
+                                      // ),
+                                      Row(
+                                        children: [
+                                          Checkbox(
+                                            checkColor: Colors.white,
+                                            value: isChecked,
+                                            onChanged: (bool? value) {
+                                              setState(() {
+                                                isChecked = value!;
+                                              });
+                                            },
+                                          ),
+                                          Text(
+                                            "Remember me ",
+                                            style: TextStyle(fontSize: 15),
+                                          ),
+                                          TextButton(
                                               onPressed: () {
                                                 showDialog(
                                                     context: context,
@@ -181,47 +301,75 @@ class _MyloginState extends State<Mylogin> {
                                                   color: Colors.blueAccent,
                                                 ),
                                               )),
-                                        ),
-                                      ],
-                                    )
-                                  ],
+                                        ],
+                                      )
+                                    ],
+                                  ),
                                 ),
-                                SizedBox(
-                                  height: 45,
-                                  width: _width,
-                                  child: ElevatedButton(
-                                      onPressed: () {}, child: Text("Sign in")),
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text("Become a seller"),
-                                    TextButton(
-                                        onPressed: () {
-                                          Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    Registration()),
-                                          );
-                                        },
-                                        child: Text(
-                                          "Signup",
-                                          style: TextStyle(
-                                              color: Colors.blueAccent,
-                                              decoration:
-                                                  TextDecoration.underline),
-                                        ))
-                                  ],
-                                ),
-                              ],
-                            ),
+                              ),
+                              SizedBox(
+                                height: 45,
+                                width: _width,
+                                child: ElevatedButton(
+                                    onPressed: (){
+                                      if(_phoneNumberController.text.isNotEmpty && _passWordController.text.isNotEmpty ){
+                                        setState(() {
+                                          isMobileNoError=false;
+                                          mobileErrorText='';
+                                          isPasswordError=false;
+                                          passwordErrorText='';
+                                        });
+                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>Newone()),);
+                                      }else{
+                                        if(_phoneNumberController.text.isEmpty){
+                                          setState(() {
+                                            isMobileNoError=true;
+                                            mobileErrorText='Enter valid Mobile No';
+                                          });
+                                        }
+                                        if(_passWordController.text.isEmpty){
+                                          setState(() {
+                                            isPasswordError=true;
+                                            passwordErrorText='Enter valid password';
+                                          });
+                                        }
+                                      }
+                                    },
+                                  child: Text("Sign in")),
+                              ),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text("Become a seller"),
+                                  TextButton(
+                                      onPressed: () {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  Registration()),
+                                        );
+                                      },
+                                      child: Text(
+                                        "Signup",
+                                        style: TextStyle(
+                                            color: Colors.blueAccent,
+                                            decoration:
+                                            TextDecoration.underline),
+                                      ))
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ],
-                    ))
-              ],
-            )),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }
